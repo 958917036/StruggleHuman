@@ -1,0 +1,3 @@
+dubbo\provider\service\OrderService.class
+dubbo\provider\bean\User.class
+dubbo\provider\service\UserService.class

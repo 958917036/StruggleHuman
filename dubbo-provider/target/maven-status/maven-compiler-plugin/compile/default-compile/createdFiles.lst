@@ -1,0 +1,7 @@
+dubbo\provider\init\api\TestProviderApi.class
+dubbo\provider\service\impl\AnnotateUserServiceImpl.class
+dubbo\provider\init\xml\TestProviderXml.class
+dubbo\provider\service\impl\UserServiceImpl.class
+dubbo\provider\init\annotation\TestProviderAnnotation.class
+dubbo\provider\service\impl\UserServiceImpl2.class
+dubbo\provider\init\annotation\AnnotateConfiguration.class

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    	http://www.springframework.org/schema/beans/spring-beans.xsd 
+    	http://code.alibabatech.com/schema/dubbo 
+    	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">  
+    
+	
+	<bean id="userService" class="dubbo.provider.service.impl.UserServiceImpl"></bean>
+	<bean id="userService2" class="dubbo.provider.service.impl.UserServiceImpl2"></bean>
+	
+	<!-- application：应用服务名， registry:服务注册中心, protocol:服务使用的协议, service:对外暴露的服务 -->
+	<dubbo:application name="dubbo_provider"></dubbo:application>
+	
+	<!-- 可以同时声明多个注册中心，下面服务声明就可以像指明多协议一样指明同时注册到多注册中心 -->
+	<dubbo:registry id="localRegistry" address="zookeeper://127.0.0.1:2181"></dubbo:registry>
+	<!-- <dubbo:registry id="remoteRegistry" address="XXX.XXX.XXX.XXX"></dubbo:registry> -->
+	<!-- 
+		protocol指定协议
+		dispatcher表示将哪些消息放到线程池，策略如下：
+			all:所有消息都派发到线程池，消息类型：请求，响应，连接，断连，心跳
+			direct:所有消息都不发到线程池，全部在io线程中执行
+			message:只有请求、响应消息发到线程池
+			execution:只有请求消息发到线程池
+			connection:连接、断开之外的消息派发到线程池（不确定） 
+		threadpool:
+			fixed:固定大小线程池，不会关闭
+			cached：缓存线程池，空闲一分钟则关闭
+			limited：可伸缩，只会长，不会减
+			eager:类似于java ThreadPool
+	-->
+	<dubbo:protocol name="dubbo" dispatcher="all" threadpool="fixed" threads="100" port="20881"></dubbo:protocol>
+	<dubbo:protocol name="rmi" port="20882"></dubbo:protocol>
+	
+	<!-- 使用多协议暴露服务 -->
+	<dubbo:service interface="dubbo.provider.service.UserService" ref="userService" timeout="2000" protocol="dubbo,rmi"
+		version="1.0.0">
+		<dubbo:method name="sayHello" timeout="1000"></dubbo:method>
+		<dubbo:method name="getUser"></dubbo:method>
+	</dubbo:service>
+	<dubbo:service interface="dubbo.provider.service.UserService" ref="userService2" timeout="2000" protocol="dubbo,rmi"
+		version="2.0.0">
+		<dubbo:method name="sayHello" timeout="1000"></dubbo:method>
+		<dubbo:method name="getUser"></dubbo:method>
+	</dubbo:service>
+	
+	<!-- 整个服务的全局配置，timeout表示调用者最多等待时间,服务端总共三个层次的超时配置：
+		全局配置，接口配置，方法配置，优先级递增。消费者同样支持三种配置，同级别配置优先级高于服务者 -->
+	<dubbo:provider timeout="6000"></dubbo:provider>
+	
+	<!-- 配置监控中心 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+</beans>
