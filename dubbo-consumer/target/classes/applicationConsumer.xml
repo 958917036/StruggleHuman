@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    	http://www.springframework.org/schema/beans/spring-beans.xsd 
+    	http://code.alibabatech.com/schema/dubbo 
+    	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">  
+    
+	
+	<dubbo:application name="dubbo_consumer"/>
+	<dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181"></dubbo:registry>
+	<!-- reference表示自己是服务消费者，interface指明引用的是哪个服务，
+		check:表示启动时是否检查服务可用性，配置为false表示不需要服务提供者先于消费者运行 
+		cluster:表示集群的容错模式,有：
+			failover（失败重试），failfast（失败返回），failsafe（忽略失败），failback（失败后台重试），forking（失败多播），broadcast（失败广播）
+		loadbalance:表示负载均衡策略(可能同时有多个服务提供者)，支持方法及和接口级（客户端服务端均可配置）。策略有:
+			random(随机访问),roundrobin(轮询),leastactive(最少活跃数，能者多劳),consistenthash(一致性hash，相同参数的请求总是发到同一个提供者)-->
+	<dubbo:reference id="userService" interface="dubbo.provider.service.UserService" check="false" retries="3" 
+		cluster="failover" loadbalance="roundrobin" url="dubbo://localhost:20881" version="1.0.0" stub="dubbo.consumer.init.xml.UserServiceStub">
+		<!-- retries指定调用方法失败时的尝试次数，方法级的优先级大于接口级，此处设置重试次数为2（不包括第一次），即最多调用3次 -->
+		<dubbo:method name="sayHello" retries="2" loadbalance="random"></dubbo:method>   
+		<dubbo:method name="getUser"></dubbo:method>
+	</dubbo:reference>
+	
+	<!-- url可以配置直连服务提供者，绕过注册中心registry，即不用去zookeeper中寻找服务提供者，直接调用url对应的远程服务 -->
+	<!-- <dubbo:reference id="XXX" interface="XXX" url="dubbo://localhost:20881" /> -->
+		
+	<!-- 进行全局配置consumer服务，关闭所有服务的启动时检查（检查依赖服务是否存在），表示注册订阅成功，引用服务不存在的时候允许启动 -->
+	<dubbo:consumer check="false"></dubbo:consumer>
+	
+	<!-- 关闭注册中心启动时检查，配置为false表示注册订阅失败也允许启动，将在后台定时重试 -->
+	<dubbo:registry check="false"></dubbo:registry>
+	<!-- 配置监控中心 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+	
+	<!-- 配置本地存根 -->
+	
+</beans>
