@@ -1,0 +1,204 @@
+<html>
+<head>
+	<title>
+		图书馆理系统
+	</title>
+	<meta charset="utf-8" />
+	<style type="text/css">
+	#body{
+		width:90%;
+		height:100%;
+		margin-left: 60px;
+	}
+	a{
+		text-decoration: none;
+		color:#FF33FF;
+
+	}
+	p{
+		margin-top:2px;
+	}
+		#logo{
+		background-image: url("public/images/logo3.jpg");
+			background-color: #FEDEC7;
+			height:200px;
+			background-repeat:no-repeat;
+			
+		}
+		 #logo3{
+			width:750px;
+			background-image: url("public/images/logo3.jpg");
+			background-repeat:no-repeat;
+			height:200px;
+			float:left;
+		}
+		#logo4{
+			width:450px;
+			background-image: url("public/images/logo4.png");
+			background-repeat:no-repeat;
+			height:200px;
+			float:left;
+		}  
+		#head{
+			color:purple;
+		font-size:30px;
+		float:left;
+		margin-top:150px;
+		margin-left:40px;
+		margin-bottom:0px;
+		}
+		#content{
+			height:600px;
+			width:100%;
+			
+		}
+		
+		#left{
+			float:left;
+			height:100%;
+			width:60%;
+			background-color: white;
+			background-image:url("public/images/up1.jpg");
+			
+		}
+		#up{
+			margin-top:0px;
+			height:40%;
+			
+		}
+		#down{
+			height:56.8%;
+			
+			padding-left:20px;
+		}
+		#right{
+			height:100%;
+			width:40%;
+			float:left;
+			}
+		#top{
+			height:50%;
+			background-color: yellow;
+			padding-left:20px;
+		}
+		#bot{
+			height:50%;
+			background-color:orange;
+			padding-left:20px;
+		}
+		#banner{
+			text-align: center;
+			margin-top: 0px;
+			background-color: green;
+		}
+		#search{
+			margin-left:80px;
+			color:red;
+			
+			font-size:20px;
+		}
+		#col{
+			color:#4F8EB0;
+		}
+		#search {
+		color: #FF00FF;
+	}
+
+    </style>
+	<script src="public/javascripts/jquery.min.js"></script>
+	<link href="public/stylesheets/bootstrap.min.css" rel="stylesheet">
+	<script src="public/javascripts/bootstrap.min.js"></script>
+    <style type="text/css">
+.STYLE1 {color: #33CCFF}
+    .STYLE2 {color: #C6FEBC}
+    .STYLE3 {color: #ECE22D}
+    </style>
+</head>
+<body>
+<div id="body">
+	<div id="logo" >
+		<div id="logo3"></div>
+		<div id="logo4"></div>
+		<p id="head"><a href="search.html">搜索|<a href="main.html">主页</a>|<a href="login.html">登录</a></p>
+	</div>
+	<div id="content">
+		<div id="left">
+			<div id="up">
+				<!--<div id="search" >
+					<select id="set">
+						<option value="content">内容</option>
+						<option value="author">作者</option>
+						<option value="bname">书名</option>
+						<option value="barcode">编号</option>
+					</select>
+					<span>SEARCH:</span>
+					<input id="inputs"></input>
+					<button  class="btn btn-success" onClick="getsearch()">submit</button>
+				</div>-->
+				
+				<div id="search">
+				<h2>实时新闻</h2>
+				<marquee direction="up" scrolldelay="500" id="col" onmouseover=this.stop() onmouseout=this.start()>
+				<p id="col"><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1711" class="STYLE1">图书馆2015年暑假开放时间表</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1710" class="STYLE1">图书馆关于开展向全校读者征求意见和建议活...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1709" class="STYLE1">EBSCO 暑期在线教学课程通知</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1708" class="STYLE1">IEEE数据库网络课堂本周五（7月10日...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1707" class="STYLE1">图书馆开展“学习党章、牢记誓言、遵守党章...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1706" class="STYLE1">IEEE数据库网络课堂本周五（7月3日）...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1705" class="STYLE1">IEEE数据库网络课堂本周五（6月26...</a></p>
+				
+				</marquee>
+				</div>
+			</div>
+			
+			<div id="down">
+				<h3 style="margin-top:0px; padding-top:8px; color: #FF00FF;">信息服务</h3>
+				<p><span class="STYLE2"><span class="STYLE3"><a href ="http://210.45.242.3/dzhtd/duzhe.htm">读者天地</a></span></span></p>
+				<p class="STYLE3"><a href ="http://kjcx.hfut.edu.cn/">科技查新 </a></p>
+				<p class="STYLE3"><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1372">网海导航 </a></p>
+				<p class="STYLE3"><a href ="http://210.45.242.3/js/index1.htm">教学培训</a></p>
+				<p class="STYLE3"><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1370">学科馆员</a></p>
+				<p class="STYLE3"><a href ="http://lib.hfut.edu.cn/downloadlist.aspx?sec_id=151">软件仓库 </a></p>
+				
+			</div>
+			
+		</div>
+		<div id="right">
+			<div id="top">
+				<h3 style="margin-top:0px;padding-top:8px">新闻公告</h3>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1711">图书馆2015年暑假开放时间表</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1710">图书馆关于开展向全校读者征求意见和建议活...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1709">EBSCO 暑期在线教学课程通知</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1708">IEEE数据库网络课堂本周五（7月10日...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1707">图书馆开展“学习党章、牢记誓言、遵守党章...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1706">IEEE数据库网络课堂本周五（7月3日）...</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/ShowPage.aspx?art_id=1705">IEEE数据库网络课堂”本周五（6月26...</a></p>
+				
+			</div>
+			<div  id="bot" >
+				<h3 style="margin-top:0px;padding-top:8px">电子资源</h3>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=59">外研社外语资源库</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=56">超星电子图书 </a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=54">万方数据资源系统 </a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=38">维普期刊</a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=260">创业数字图书馆 </a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=76">IEEE/IET Electronic Library(IEL) </a></p>
+				<p><a href ="http://lib.hfut.edu.cn/resourcen.aspx?rid=342">起点考研网</a></p>
+				
+			</div>
+
+		</div>
+	</div>
+	<div id="banner">
+		版权所有      合肥工业大学图书馆   大学图书馆学报   图工委   高校分会  DRAA  馆长信箱 常用链接   网站地图  移动版  旧版入口
+	</div>
+	
+		<script>
+	function getsearch(){
+		var category=null;
+			location.href="search.html";
+		};
+	</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<description>this is a sevlet test1</description>
+	<displayNam>this is a display name1</displayNam>
+	<context-param>
+		<param-name>url</param-name>
+		<param-value>http://127.0.0.1</param-value>
+	</context-param>
+	
+	<!-- 自定义2个拦截器 -->
+	<filter>
+		<filter-name>filter1</filter-name>
+		<filter-class>gc.study.servlet.Servlet12_filter</filter-class>
+		<!-- 向自定义的拦截器传递参数 -->
+		<init-param>
+			<param-name>test1</param-name>
+			<param-value>value1</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>filter2</filter-name>
+		<filter-class>gc.study.servlet.Servlet12_filter2</filter-class>
+	</filter>
+	
+	<!-- 多个filter的拦截顺序与filter-mapping定义的顺序一致，所以filter1先拦截，filter2后拦截 -->
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/*</url-pattern> 		<!-- 这里定义拦截的url为所有 -->
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>filter2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>Servlet1</servlet-name>
+		<servlet-class>gc.study.servlet.Servlet1</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+    <!-- 访问地址(servlet是工程名)： http://127.0.0.1:8080/servlet/test/servlet1  -->
+	<servlet-mapping>
+		<servlet-name>Servlet1</servlet-name>
+		<url-pattern>/test/servlet</url-pattern>
+	</servlet-mapping>
+	
+	
+	 <!-- <servlet>
+	 	<servlet-name>defaultServlet2</servlet-name>
+	 	<servlet-class>gc.study.servlet.Servlet2</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>defaultServlet2</servlet-name>
+	 	<url-pattern>/</url-pattern>  匹配所有
+	 </servlet-mapping> -->
+	 
+	 <servlet>
+	 	<servlet-name>servlet3</servlet-name>
+	 	<servlet-class>gc.study.servlet.Servlet3</servlet-class>
+	 	<init-param>
+	 		<param-name>name</param-name>
+	 		<param-value>gc</param-value>
+	 	</init-param>
+	 	<init-param>
+	 		<param-name>age</param-name>
+	 		<param-value>25</param-value>
+	 	</init-param>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>servlet3</servlet-name>
+	 	<url-pattern>/test/servlet3</url-pattern>
+	 </servlet-mapping>
+	 
+	 <!-- 这个过滤器没有达到预期目的，也是在servlet实例处理请求之前过滤到 -->
+	 <filter>
+	 	<filter-name>outFilter</filter-name>
+	 	<filter-class>gc.study.servlet.Servlet12_filter_after</filter-class> 
+	 </filter>
+	 <filter-mapping>
+	 	<filter-name>outFilter</filter-name>
+	 	<url-pattern>/*</url-pattern>
+	 </filter-mapping>
+</web-app>
