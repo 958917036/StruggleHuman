@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="gc.mapper.StudentMapper">
+	<select id="selectStudent" resultType="gc.bean.Student">
+		select * from student
+	</select>
+	
+	<select id="selectOne" resultType="gc.bean.Student">
+		select * from student where id = #{id}
+	</select>
+	
+	<insert id="insertOne" parameterType="gc.bean.Student">
+		insert into student (id,name,age) 
+		values (#{id},#{name},#{age})
+	</insert>
+	
+	<update id="updateOne" parameterType="gc.bean.Student">
+		update student set name=#{name} where id= #{id}
+	</update>
+	
+	<delete id="deleteOne" parameterType="gc.bean.Student">
+		delete from student where id = #{id}
+	</delete>
+</mapper>
