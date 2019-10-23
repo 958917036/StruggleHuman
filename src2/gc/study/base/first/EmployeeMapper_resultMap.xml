@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gc.study.base.first.bean.dao.EmployeeMapper">
+  	
+  	<select id="getEmpByLastName" resultType="gc.study.base.first.bean.Employee">
+  		select * from tbl_employee where last_name like #{lastName}
+  	</select>
+  	
+  	<select id="getEmpByIdReturnMap" resultType="map">
+  		select * from tbl_employee where id=#{id}
+  	</select>
+  	
+  	<select id="getEmpByLastNameReturnMap" resultType="gc.study.base.first.bean.Employee">
+  		select * from tbl_employee where last_name like #{lastName}
+  	</select>
+  	
+  	<!-- resultMap
+  		type：自定义规则的java类型
+  		id：唯一id方便引用
+	 -->
+  	<resultMap type="gc.study.base.first.bean.Employee" id="mymap1">
+  		<!-- id指定主键列的封装规则，column指定数据库中的列，property指定javabean的属性 -->
+  		<id column="id" property="id"/>
+  		<result column="last_name" property="lastName"/>
+  		<result column="email" property="email"/>
+  		<result column="gender" property="gender"/>
+  		
+  	</resultMap>
+  	<select id="getEmpById_map" resultType="emp" resultMap="mymap1">
+  		select * from tbl_employee where id=#{id}
+  	</select>
+  	
+  	<!-- 联合查询，级联属性封装结果 -->
+  	<resultMap type="gc.study.base.first.bean.Employee" id="mymap2">
+  		<id column="id" property="id"/>
+  		<result column="last_name" property="lastName"/>
+  		<result column="gender" property="gender"/>
+  		<result column="did" property="dept.id"/>
+  		<result column="dep" property="dept.departmentName"/>
+  	</resultMap>
+  	<!-- 使用association定义来关联对象 mymap3等价于mymap2 -->
+  	<resultMap type="gc.study.base.first.bean.Employee" id="mymap3">
+  		<id column="id" property="id"/>
+  		<result column="last_name" property="lastName"/>
+  		<result column="gender" property="gender"/>
+  		<!-- association可以指定联合的javabean对象 
+  			property指定在Employee中中这个属性的名字
+  			javaType 指定这个属性对象的类型
+  		-->
+  		<association property="dept" javaType="gc.study.base.first.bean.Department">
+			  <id column="did" property="id"/>
+			  <result column="dep" property="departmentName"/>
+  		</association>
+  	</resultMap>
+  	
+  	<select id="getEmpAndDept" resultMap="mymap3">
+  		select e.id id, e.last_name last_name, e.gender gender,e.d_id d_id, 
+  		d.id did, d.dept_name dep 
+  		from tbl_employee e,tbl_dept d 
+  		where e.d_id=d.id and e.id=1;
+  	</select>
+  	
+  	<!-- 使用association进行分布查询 
+  		先按照员工id查出员工信息
+  		根据员工信息中的d_id去部门表查询部门信息
+  		部门设置到员工中-->
+  	<resultMap type="Employee" id="MyEmpByStep">
+  		<id column="id" property="id"/>
+  		<result column="last_name" property="lastName"/>
+  		<result column="email" property="email"/>
+  		<result column="gender" property="gender"/>
+  		<!-- association定义关联的对象 
+  			select 表明当前属性是调用select指定的方法查询的结果
+  			column 指定将哪一列的值传给这个方法
+  			流程：使用select指定的方法（传入column为查询关键字）查出对象，并封装给property指定的属性-->
+  		<association property="dept" 
+  			select="gc.study.base.first.bean.dao.DepartmentMapper.getDeptById" 
+  			column="d_id">
+  		</association>
+  	</resultMap>
+  	<select id="getEmpByIdStep" resultMap="MyEmpByStep">
+  		select * from tbl_employee where id=#{id}
+  	</select>
+  	
+  	<!-- 可以使用延迟加载
+  		Employee==>Dept
+  			我们每次查询Employee对象的时候，都将Dept一起查询出来了
+  			部门信息在我们使用的时候再查询，
+  			分段 -->
+  			
+  	<select id="getEmpsByDeptId" resultType="employee">
+  		select * from tbl_employee where d_id=#{d_id}
+  	</select>
+
+</mapper>
+

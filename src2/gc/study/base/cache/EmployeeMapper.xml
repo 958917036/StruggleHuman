@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--这个配置文件测试的是存xml配置来实现数据库的查询操作 
+	namespace:命名空间，对于接口类型的实现，namespace名必须和接口的全路径类名一致
+	id:唯一标识
+	#{id} 从传递过来的参数中标取出id值，也是占位符 -->
+
+<mapper namespace="gc.study.base.cache.dao.EmployeeMapper" >
+  <!-- 
+  		eviction：缓存清除策略
+  		flushInterval:缓存刷新时间，默认不清空，单位毫秒
+  		readOnly:缓存是否只读
+  			true:mybatis认为数据不会被修改，直接将缓存中的对象引用返回给用户
+  			false：mybatis认为数据可能被修改，将序列化的对象clone一份返回给用户
+  		size:缓存存放的元素个数，即对象个数
+  		type:指定自定义缓存的全类名
+  		
+   -->
+  <cache eviction="LRU" flushInterval="60000" 
+  		readOnly="true" blocking="" size="1024">
+  
+  </cache>
+  
+  <select id="getEmpById" resultType="cache_e">
+    select * from tbl_employee where id = #{id}
+  </select>
+  
+  <select id="getEmpByGender" resultType="cache_e">
+    select * from tbl_employee where gender = #{gender}
+  </select>
+  <!-- mysql支持自增主键，自增主键的获取，mybatis也是利用statement.get 
+  		useGeneratedKeys="true" :使用自增主键获取主键值策略
+  		keyProperty 指定对应的主键属性，也就是mybatis获取到主键值后，将这个值封装给java bean的哪个属性-->
+  <insert id="addEmp" parameterType="cache_e" useGeneratedKeys="true" keyProperty="id">
+  	insert into tbl_employee(last_name,email,gender) 
+  	values (#{lastName},#{email},#{gender})
+  </insert>
+  
+  <update id="updateEmp" >
+  	update tbl_employee 
+  		set last_name=#{lastName},email=#{email},gender=#{gender}
+  		where id=#{id}
+  </update>
+  
+  <delete id="deleteEmp">
+  	delete from tbl_employee where id=#{id}
+  </delete>
+</mapper>

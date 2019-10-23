@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 这个xml是需要声明接口，声明sql操作的方法名（不需要实现），在xml配置中去实现接口中定义的方法
+		即通过反射的方式将xml中定义的对应的sql操作在接口定义的方法中执行，
+		匹配关系是namespace对应接口，id对应接口中的方法 
+	namespace:命名空间，对应接口的类的全路径
+	id:唯一标识，对应接口中的相应的方法
+	#{id} 从传递过来的参数中标取出id值，也是占位符 
+	
+	这里使用了select * 也能映射出来lastName，因为在全举报配置文件中配置了
+	mapUnderscoreToCamelCase为true，表示数据库中的_匹配java的驼峰规则，
+	即数据库的a_b自动映射为java对象的aB
+	databaseId：指定数据库厂商-->
+
+<mapper namespace="gc.study.base.first.bean.dao.EmployeeMapper">
+	<select id="getEmpById" resultType="Employee" databaseId="mysql">
+		select * from tbl_employee where id = #{id}
+	</select>
+	
+	<!-- mybatis参数解析原理：
+		单个参数：mybatis不做特殊处理
+		多个参数：mybatis会做特殊处理
+			多个参数被封装成一个map,
+				key：param1,param2 
+			#{}就是从map中获取指定的key的值，#{}中填写param1，param2是可以的，不能直接使用字段名
+		命名参数（用于解决多个参数的问题）：
+			明确指定封装参数时map的key，@Param("id") 指定了后面参数的key为id，所以下面sql中可以直接应用#{id}
+			如果有多个参数，且正好是业务逻辑的数据模型，那么可以直接传pojo对象
+			如果不是同一个数据模型，可以传入map，因为mybatis本身就是把参数放到map中的
+			如果多个参数不是业务模型中的数据，但是经常要使用，推荐编写一个TO(Transfer Object)数据传输对象-->
+	<select id="getEmpByIdAndName" resultType="Employee" databaseId="mysql">
+		select * from tbl_employee where id = #{id} and last_name=#{lastName}
+		<!-- select * from tbl_employee where id = #{param1} and last_name=#{param2} -->
+	</select>
+	
+	<select id="getEmpByMap" resultType="emp">
+		select * from tbl_employee where id = #{id} and last_name=#{lastName}
+		<!-- select * from tbl_employee where id = #{param1} and last_name=#{param2} -->
+	</select>
+	
+	<!--  
+		public Employee getEmp(Integer id,Employee e);
+		取值： id==>#{param1} lastName==>#{param2.lastName}
+		特别注意：如果是Collection(List，Set)类型或者数组.也会特殊处理，也是把传入的list或者数组封装到map中。
+			key: Collection(collection),如果是List还可以使用这个key(list),数组(array)
+		public Employee getEmpById(List<Integer> ids);
+		取值：取出第一个id的值： #{list[0]}
+		
+		ParamNameResolver解析参数
+		public Employee getEmpByIdAndName(@Param("id")Integer id,@Param("lastName")String lastName);
+		入参：employee = mapper.getEmpByIdAndName(1, "dadada");
+		names:{0=id, 1=lastName}   //参数索引和参数名，这里value为实际值是因为标注了param
+			获取每个标注了Param注解的参数的param值，赋值给name
+			如果解析一个参数给map中保存信息（key为参数索引，value为name值）
+				name的值：
+					标注了param注解，注解的值
+					没有标注，name=map.size()  即key等于value names:{0=0, 1=1}
+		执行sql的时候以names的value为key，以names的key作为索引取出对应的参数值
+	-->
+	
+	<!-- 
+		参数值得获取
+		#{}： 可以获取map中的值或者pojo中的值
+		${}：可以获取map中的值或者pojo中的值
+		区别：
+			#{} 是以预编译的形式（有 ？ 号占位符），将参数设置到sql语句中：PreparedStatement；防止sql注入
+			${} 取出的值直接拼装在sql中；会有安全问题,但是可以用于替换表名等信息
+			大多数情况下，我们应该使用#{}
+			原生jdbc不支持占位符的地方我们可以使用${}进行取值
+			比如分表：按照年份分表拆分,表名不支持预编译，所以可以使用${} 
+				select * from ${year}_salary where ...; 
+	 -->
+	 
+	 <!-- 
+	 #{}： 更丰富的用法
+	 	规定参数的一些规则：
+	 		javaType，jdbcType，mode，numericScale，resultMap，typeHandler，	
+	 		
+	 		jdbcType通常需要在某种特定的条件下被设置：
+	 			在我们数据为null的时候，有些不数据库可能不能识别mybatis对null的默认处理，
+	 			比如oracle报错： jdbcType OTHER 无效的类型
+	  -->
+</mapper>

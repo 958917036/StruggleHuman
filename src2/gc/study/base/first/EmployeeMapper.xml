@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--这个配置文件测试的是存xml配置来实现数据库的查询操作 
+	namespace:命名空间，可以随便取值
+	id:唯一标识
+	#{id} 从传递过来的参数中标取出id值，也是占位符 -->
+
+<mapper namespace="first">
+  
+  <select id="selectEmp" resultType="gc.study.base.first.bean.Employee">
+    select id,last_name lastname,gender,email from tbl_employee where id = #{id}
+  </select>
+</mapper>
+

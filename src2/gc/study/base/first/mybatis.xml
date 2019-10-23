@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- dtd文件是定义xml规则的，双击上面的url连接会自动下载dtd文件，然后在xml中就会有自动提示功能 -->  
+
+<configuration>
+	<!-- resource引入类路径下的资源
+		url引入网络路径或者磁盘文件的资源 -->
+	<properties resource="jdbc.properties"></properties>
+	<!-- settings中包含重要设置项
+		setting用来设置每一个设置项 
+		mapUnderscoreToCamelCase表示数据库中的_匹配java的驼峰规则，
+		即数据库的a_b自动映射为java对象的aB-->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<!-- 显示指定懒加载 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	<typeAliases>
+		<!-- typeAlias为某一个java类起别名，
+			type指定要起别名的类的全路径名，默认别名是首字母小写的类名
+			别名不区分大小写 -->
+		<typeAlias type="gc.study.base.first.bean.Employee" alias="emp"/>
+		
+		<!-- package为某个包下的所有类名批量起别名，
+			name指定包名（为当前包写的所有后代包及类都起一个类名小写的别名）
+			批量起别名的情况下，使用@Alias为某个类起别名来解决冲突 -->
+		<package name="gc.study.base.first.bean"/>
+	</typeAliases>
+  <!-- environments：mybatis可以配置多种环境
+  		 environment：配置一个具体的环境信息，必须有两个标签
+  			transactionManager:事物管理器(实际上事物都是交给spring来做)
+  				type:事物管理器的类型 JDBC|MANAGED
+  			dataSource：数据源,指定
+  				type:UNPOOLED|POOLED|JNDI
+  		default指定默认的环境，可以通过修改这个值来改变运行环境-->
+  <environments default="development">
+    <environment id="test">
+    	<transactionManager type="JDBC"></transactionManager>
+    	<dataSource type="POOLED"></dataSource>	
+    </environment>
+    
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <!-- databaseIdProvider用于支持多数据库厂商,
+  		type=DB_VENDOR 作用就是得到数据库厂商的标识（驱动中带有的信息），
+  		mybatis根据厂商
+  		默认厂商标识：MySQL，Oracle，SQL SERVER
+  		property用于设置别名，只需要在mapper配置文件中指定databaseId即可-->
+  <databaseIdProvider type="DB_VENDOR">
+  	<property name="MySQL" value="mysql"/>
+  	<property name="Oracle" value="oracle"/>
+  </databaseIdProvider>
+  
+  <!-- mappers：将写好的sql映射文件注册到全局配置文件中 
+  			mapper:注册一个sql映射
+  				resource：引用类路径下的sql映射文件
+  				url：引用网络路径或者磁盘路径下的文件
+  				class:引用注册接口，有以下两种方式
+  					1.有sql映射文件，映射文件名必须和接口同名，并且放在与接口同一个目录下
+  					2.没有sql映射文件，所有的映射都写到接口上
+  				推荐：比较重要的，复杂的dao接口我们写sql映射文件
+  					不重要的，简单的接口为了快速开发可以使用注解
+  			package:批量注册sql映射文件-->
+  <mappers>
+    <mapper resource="gc/study/base/first/EmployeeMapper.xml"/>
+    <mapper resource="gc/study/base/first/DepartmentMapper.xml"/>
+    <mapper resource="gc/study/base/first/EmployeeMapper2.xml"/>
+    <mapper resource="gc/study/base/first/EmployeeMapper_resultMap.xml"/>
+    <mapper class="gc.study.base.first.bean.dao.EmployeeMapperAnnotation"/>
+    <!-- 批量注册sql映射文件 -->
+    <!-- <package name="gc.study.base.first.bean.dao"/> -->
+  </mappers>
+  
+</configuration>
